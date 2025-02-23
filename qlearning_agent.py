@@ -13,6 +13,7 @@ import os
 hostname = os.uname()[1]
 
 timesteps = 1000000
+eval_episodes = 100
 
 # Initialize wandb
 wandb.init(
@@ -23,6 +24,7 @@ wandb.init(
     config={
         "algorithm": "Q Learning",
         "timesteps": timesteps,
+        "eval_episodes": eval_episodes, 
         "env": "FrozenLakeEnv"
     }
 )
@@ -35,9 +37,9 @@ def epsilon_greedy_policy(Q, state, epsilon):
 
 
 
-def q_learning(env, num_episodes, alpha=0.1, gamma=0.99, epsilon=0.1):
-    Q = np.zeros([env.observation_space.n, env.action_space.n])
-    pbar = tqdm(total=num_episodes, dynamic_ncols=True)
+def q_learning(env, num_episodes, alpha=0.1, gamma=0.99, epsilon=0.1):  # alpha: learning rate, aka step size; gamma: discount factor
+    Q = np.zeros([env.observation_space.n, env.action_space.n])  # Q-Table, a value for each state/action pair
+    pbar = tqdm(total=num_episodes, dynamic_ncols=True) # progress bar
     for episode in range(num_episodes):
         state, _ = env.reset()
         done = False
@@ -53,8 +55,8 @@ def q_learning(env, num_episodes, alpha=0.1, gamma=0.99, epsilon=0.1):
             episode_reward += reward
         pbar.update(1)
         if episode % 1000 == 0:
-            avg_reward = evaluate_policy(env, Q, 100)
-            pbar.set_description(f"\nAverage reward after {episode} episodes: {avg_reward:.2f}")
+            avg_reward = evaluate_policy(env, Q, eval_episodes)
+            pbar.set_description(f"\nAverage reward after {episode} episodes, evaluated in {eval_episodes} episodes: {avg_reward:.2f}")
             wandb.log({"episode": episode, "avg_reward": avg_reward})
     pbar.close()
     return Q
