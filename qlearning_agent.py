@@ -18,7 +18,7 @@ timesteps = 1000000
 wandb.init(
 
     project="FrozenLake",
-    name = "Q Learning:" + hostname + wandb.util.generate_id(),
+    name = "Q Learning:" + hostname + ":" + wandb.util.generate_id(),
     tags=["q-learning", ],
     config={
         "algorithm": "Q Learning",
