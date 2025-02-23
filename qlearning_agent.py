@@ -8,6 +8,8 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 direction_map = {0: "left", 1: "down", 2: "right", 3: "up"}
 
+timesteps = 1000000
+
 # Initialize wandb
 wandb.init(
 
@@ -16,7 +18,7 @@ wandb.init(
     tags=["q-learning", ],
     config={
         "algorithm": "Q Learning",
-        "timesteps": 100000,
+        "timesteps": timesteps,
         "env": "FrozenLakeEnv"
     }
 )
@@ -89,7 +91,7 @@ def demo_agent(env, Q, num_episodes=1):
 
 def main():
     env = gym.make("FrozenLake-v1")
-    num_episodes = 10000
+    num_episodes = timesteps
 
     Q = q_learning(env, num_episodes)
     avg_reward = evaluate_policy(env, Q, num_episodes)
