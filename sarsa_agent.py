@@ -15,6 +15,7 @@ import os
 
 hostname = os.uname()[1]
 
+timesteps = 1000000
 
 # Initialize wandb
 wandb.init(
@@ -23,7 +24,7 @@ wandb.init(
     tags=["sarsa", ],
     config={
         "algorithm": "Sarsa",
-        "timesteps": 100000,
+        "timesteps": timesteps,
         "env": "FrozenLakeEnv"
     }
 )
@@ -104,7 +105,7 @@ def demo_agent(env, Q, num_episodes=1):
 
 def main():
     env = gym.make("FrozenLake-v1", render_mode='ansi')
-    num_episodes = 10000
+    num_episodes = timesteps
 
     Q_sarsa = sarsa(env, num_episodes)
     avg_reward = evaluate_policy(env, Q_sarsa, num_episodes)
