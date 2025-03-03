@@ -47,7 +47,7 @@ def q_learning(env, num_episodes, alpha=0.1, gamma=0.99, epsilon=0.1):  # alpha:
         while not done:
             action = epsilon_greedy_policy(Q, state, epsilon)
             next_state, reward, done, _, _ = env.step(action)
-            best_next_action = np.argmax(Q[next_state, :])
+            best_next_action = np.argmax(Q[next_state, :])  # This is what make Q-learning different from SARSA
             td_target = reward + gamma * Q[next_state, best_next_action]
             td_error = td_target - Q[state, action]
             Q[state, action] += alpha * td_error
