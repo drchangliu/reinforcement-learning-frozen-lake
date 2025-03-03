@@ -38,7 +38,7 @@ def epsilon_greedy_policy(Q, state, epsilon):
         return np.argmax(Q[state])
 
 
-def sarsa(env, num_episodes, alpha=0.1, gamma=0.99, epsilon=0.1):
+def sarsa(env, num_episodes, alpha=0.1, gamma=0.99, epsilon=0.1): # State-Action-Reward-State-Action: SARSA
     Q = np.zeros([env.observation_space.n, env.action_space.n])
     pbar = tqdm(total=num_episodes, dynamic_ncols=True)
     for episode in range(num_episodes):
@@ -49,9 +49,9 @@ def sarsa(env, num_episodes, alpha=0.1, gamma=0.99, epsilon=0.1):
         while not done:
             next_state, reward, done, _, _ = env.step(action)
             next_action = epsilon_greedy_policy(Q, next_state, epsilon)
-            td_target = reward + gamma * Q[next_state, next_action]
+            td_target = reward + gamma * Q[next_state, next_action]  # gamma is the discount factor
             td_error = td_target - Q[state, action]
-            Q[state, action] += alpha * td_error
+            Q[state, action] += alpha * td_error  # alpha is the learning rate
             state, action = next_state, next_action
             episode_reward += reward
         pbar.update(1)
